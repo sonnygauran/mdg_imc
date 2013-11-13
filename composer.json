@@ -1,0 +1,15 @@
+{
+    "name": "sonnygauran/mdg_imc",
+    "type": "magento-module",
+    "license":"OSL-3.0",
+    "description":"IMC(Magento Interactive Console) created as help tool in the Magento Developers Guide",
+    "authors":[
+        {
+            "name":"Allan McGregor",
+            "email":"dev@allanmacgregor.com"
+        }
+    ],
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
