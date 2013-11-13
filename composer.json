@@ -11,5 +11,10 @@
     ],
     "require": {
         "magento-hackathon/magento-composer-installer": "*"
+    },
+     "extra": {
+        "map": [
+            ["shell/imc.php", "app/shell/imc.php"]
+        ]
     }
 }
