@@ -1,35 +1,28 @@
-#!/usr/bin/php
-<?php 
-declare(ticks = 1); 
-if (!is_readable('app/Mage.php')) {
-    echo "Could not find app/Mage.php\n";
-    exit(1);
-}
+<?php
 
-require 'app/Mage.php';
-if (!Mage::isInstalled()) {
-    echo "Application is not installed yet, please complete install wizard first.";
-    exit(1);
-}
+require_once dirname(dirname(dirname(__FILE__))).'/shell/abstract.php';
 
-$baseDir = getcwd();
-//not sure if this is necessary, ported over from cron.php script
-$_SERVER['SCRIPT_NAME'] = $baseDir.'/index.php';
-$_SERVER['SCRIPT_FILENAME'] = $baseDir.'/index.php';
-Mage::app()->setUseSessionInUrl(false);
-try {
-    ini_set('display_errors', 1);
-    ini_set('log_errors', 1);
-    if (!empty($_SERVER['HOME'])) {
-        ini_set('error_log', $_SERVER['HOME'] . '/mdg_imc.log');
+/**
+ * Interactive Magento Console compatible with Magento 1.8.0.0
+ *
+ * @package     Mage_Shell
+ * @author      Sonny Gauran <sonny.gauran@outsourced.ph>
+ */
+class Mage_Interactive_Console extends Mage_Shell_Abstract
+{
+    /**
+     * Run script
+     *
+     */
+    public function run()
+    {
+        IMC::getInstance()->read();
     }
-    error_reporting(E_ALL);
-    Mage::app('','store');
-    IMC::getInstance()->read();
-} catch (Exception $e) {
-    Mage::printException($e);
 }
 
+/**
+ * @link https://github.com/amacgregor/mdg_imc Magento Interactive Console
+ */
 class IMC {
     protected static $instance = null;
     protected $historyFile = null;
@@ -121,17 +114,17 @@ class IMC {
             $funcs = get_defined_functions();
             $constants = get_defined_constants();//use these?
             $avail = array_merge(get_declared_classes(),$funcs['user'], $funcs['internal'], array());
-	    /*$classNameRegex = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
+        /*$classNameRegex = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
             if (substr($line, -4) == '\:\:') {
-		$class = substr($line,0, -4);
-		if (in_array($class, $avail)) {
+        $class = substr($line,0, -4);
+        if (in_array($class, $avail)) {
                     $methods = get_class_methods($class);
                     foreach ($methods as $key => $method) {
                         $methods[$key] = $class.'::'.$method;
                     }
                     return $methods;
-		}
-	    }*/
+        }
+        }*/
             $matches =  preg_grep("/^$line/", $avail);
             if (!empty($matches)) {//will segfault if we return empty array after 3 times...
                 return $matches;
@@ -139,3 +132,6 @@ class IMC {
         }
     }
 }
+
+$shell = new Mage_Interactive_Console();
+$shell->run();
