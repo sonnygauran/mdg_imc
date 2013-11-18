@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/instance/shell/abstract.php';
+require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/shell/abstract.php';
 
 /**
  * Interactive Magento Console compatible with Magento 1.8.0.0
